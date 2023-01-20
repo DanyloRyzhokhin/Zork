@@ -11,10 +11,10 @@ public class Game {
     }
 
     private void createRooms(){
-        Room riverBank = new Room("");
-        Room garden = new Room("");
-        Room house = new Room("");
-        Room semitary = new Room("");
+        Room riverBank = new Room("short", "long");
+        Room garden = new Room("short","long");
+        Room house = new Room("short","long");
+        Room semitary = new Room("short","long");
 
        riverBank.setExit("west", garden);
 
@@ -47,9 +47,21 @@ public class Game {
             case QUIT:
                 wantToQuit = quit(command);
                 break;
+            case LOOK:
+                look(command);
+                break;
         }
         return wantToQuit;
     }
+    private void look(Command command){
+        if(command.hasSecondWord()){
+            System.out.println("You can't look at "+command.getSecondWord());
+            return;
+        }
+
+        System.out.println(currentRoom.getLongDescription());
+    }
+
     private void goRoom(Command command){
         if(!command.hasSecondWord()){
             System.out.println("Go where?");

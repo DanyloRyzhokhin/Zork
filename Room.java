@@ -4,11 +4,13 @@ import java.util.Iterator;
 public class Room {
     private String description;
     private HashMap<String,Room>exits;
+    private HashMap<String,Item> inventory;
     private String longDescription;
     public Room(String description, String longDescription){
         this.description = description;
-        exits = new HashMap<String,Room>();
         this.longDescription = longDescription;
+        exits = new HashMap<String,Room>();
+        inventory = new HashMap<String, Item>();
     }
 
     private String getExitString(){
@@ -19,8 +21,16 @@ public class Room {
         }
         return returnString;
     }
+    public String getItemString(){
+        String returnString = "Room inventory:";
+        Set<String> keys =  inventory.keySet();
+        for(String item: keys){
+            returnString +=" "+ item;
+        }
+        return returnString;
+    }
     public String getLongDescription(){
-        return longDescription +"\n" + getExitString();
+        return longDescription +"\n" + getExitString()+"\n"+getItemString();
     }
 
     public void setExit(String direction, Room neighbor){
@@ -33,6 +43,13 @@ public class Room {
 
     public String getShortDescription(){
         return description;
+    }
+
+    public void setItem(String name,Item item ){
+        inventory.put(name,item);
+    }
+    public Item getItem(String name){
+        return inventory.remove(name);
     }
 
 }

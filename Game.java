@@ -1,8 +1,10 @@
 public class Game {
     private Room currentRoom;
     private Parser parser;
+    private Player player;
     public Game(){
         parser = new Parser();
+        player = new Player();
     }
     public static void main(String args[]){
         Game game = new Game();
@@ -11,14 +13,19 @@ public class Game {
     }
 
     private void createRooms(){
-        Room riverBank = new Room("short", "long");
-        Room garden = new Room("short","long");
-        Room house = new Room("short","long");
-        Room semitary = new Room("short","long");
+        Room riverBank = new Room("short", "long reiver");
+        Room garden = new Room("short","long garden");
+        Room house = new Room("short","long house");
+        Room semitary = new Room("short","long semitary");
 
        riverBank.setExit("west", garden);
+       garden.setExit("east", riverBank);
+       Item obj1 = new Item();
+       Item obj2 = new Item();
 
-       currentRoom = garden;
+       player.setItem("one", obj1);
+        riverBank.setItem("two", obj2);
+       currentRoom = riverBank;
 
     }
 
@@ -39,8 +46,10 @@ public class Game {
 
         switch (commandWord){
             case UNKNOWN:
+                System.out.println("I don't know what you mean");
                 break;
             case HELP:
+                printHelp();
                 break;
             case GO:
                 break;
@@ -50,14 +59,31 @@ public class Game {
             case LOOK:
                 look(command);
                 break;
-        }
-        return wantToQuit;
+            case GRAB:
+                //
+                break;
+            case DROP:
+                //
+                break;
     }
+        return wantToQuit;
+}
+
+    private void printHelp(){
+        System.out.println("You are lost. You are alone. You wander");
+        System.out.println("You are in the garden maze");
+        System.out.println();
+        System.out.println("Your command word are:");
+        System.out.println();
+    }
+
     private void look(Command command){
         if(command.hasSecondWord()){
             System.out.println("You can't look at "+command.getSecondWord());
             return;
         }
+        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.getItemString());
 
         System.out.println(currentRoom.getLongDescription());
     }

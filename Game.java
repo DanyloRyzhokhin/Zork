@@ -1,3 +1,5 @@
+import java.util.zip.GZIPOutputStream;
+
 public class Game {
     private Room currentRoom;
     private Parser parser;
@@ -13,18 +15,20 @@ public class Game {
     }
 
     private void createRooms(){
-        Room riverBank = new Room("short", "long reiver");
+        Room riverBank = new Room("short", "long river");
         Room garden = new Room("short","long garden");
         Room house = new Room("short","long house");
         Room semitary = new Room("short","long semitary");
 
        riverBank.setExit("west", garden);
        garden.setExit("east", riverBank);
+       house.setExit("south", semitary);
+      // house.setExit("", garden);
        Item obj1 = new Item();
        Item obj2 = new Item();
 
        player.setItem("one", obj1);
-        riverBank.setItem("two", obj2);
+       riverBank.setItem("two", obj2);
        currentRoom = riverBank;
 
     }
@@ -52,6 +56,7 @@ public class Game {
                 printHelp();
                 break;
             case GO:
+                goRoom(command);
                 break;
             case QUIT:
                 wantToQuit = quit(command);
@@ -60,10 +65,13 @@ public class Game {
                 look(command);
                 break;
             case GRAB:
-                //
+                grab(command);
                 break;
             case DROP:
-                //
+                drop(command);
+                break;
+            case INVENTORY:
+              //  lookInventory(command);
                 break;
     }
         return wantToQuit;
@@ -75,6 +83,7 @@ public class Game {
         System.out.println();
         System.out.println("Your command word are:");
         System.out.println();
+        System.out.println(" \"GO\" " );
     }
 
     private void look(Command command){
@@ -85,7 +94,6 @@ public class Game {
         System.out.println(currentRoom.getLongDescription());
         System.out.println(player.getItemString());
 
-        System.out.println(currentRoom.getLongDescription());
     }
 
     private void goRoom(Command command){
@@ -112,6 +120,35 @@ public class Game {
         }
     }
 
+    private void grab(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Grab what?");
+            return;
+        }
+        String wantedItem = command.getSecondWord();
+        Item  item =  currentRoom.getItem(wantedItem);
+        if(wantedItem==null){
+            System.out.println("There is no item");
+        }else{
+            player.setItem(wantedItem,item);
+            System.out.println("Now you will find "+wantedItem+" in your inventory");
+        }
+    }
+    private void drop(Command command){
+        if(!command.hasSecondWord()){
+            System.out.println("Drop what?");
+            return;
+        }
+        String wantedItemToDrop = command.getSecondWord();
+        Item item = player.getItem(wantedItemToDrop);
+        if(wantedItemToDrop==null){
+            System.out.println("There is no item that you want to drop");
+        }else{
+            currentRoom.setItem(wantedItemToDrop,item);
+            System.out.println("You dropped "+wantedItemToDrop+" from your inventory");
+        }
+    }
+
 
     private void printWelcome(){
         System.out.println();
@@ -121,7 +158,7 @@ public class Game {
         System.out.println("Type \"help\" if you need assistance");
         System.out.println();
         System.out.println("room description");
-
+        System.out.println(currentRoom.getShortDescription());
 
     }
 }

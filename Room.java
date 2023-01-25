@@ -3,12 +3,14 @@ import java.util.Set;
 import java.util.Iterator;
 public class Room {
     private String description;
+    private String name;
     private HashMap<String,Room>exits;
     private HashMap<String,Item> inventory;
     private String longDescription;
-    public Room(String description, String longDescription){
+    public Room(String description, String longDescription, String name){
         this.description = description;
         this.longDescription = longDescription;
+        this.name = name;
         exits = new HashMap<String,Room>();
         inventory = new HashMap<String, Item>();
     }
@@ -51,5 +53,9 @@ public class Room {
     public Item getItem(String name){
         return inventory.remove(name);
     }
+    public String getRoomName(){
+        return name;
+    }
+
 
 }

@@ -15,21 +15,38 @@ public class Game {
     }
 
     private void createRooms(){
-        Room riverBank = new Room("short", "long river");
-        Room garden = new Room("short","long garden");
-        Room house = new Room("short","long house");
-        Room semitary = new Room("short","long semitary");
+        Room riverBank = new Room("short river", "long river", "River Bank");
+        Room garden = new Room("short garden","long garden", "Garden");
+        Room house = new Room("short house","long house", "House");
+        Room cemetery = new Room("short cemetery","long cemetery", "cemetery");
 
-       riverBank.setExit("west", garden);
-       garden.setExit("east", riverBank);
-       house.setExit("south", semitary);
-      // house.setExit("", garden);
-       Item obj1 = new Item();
-       Item obj2 = new Item();
+        //River exits and invent
+        riverBank.setExit("west", garden);
 
-       player.setItem("one", obj1);
-       riverBank.setItem("two", obj2);
-       currentRoom = riverBank;
+        Item obj2 = new Item();
+        riverBank.setItem("two", obj2);
+        //Garden exits and invent
+        garden.setExit("east", riverBank);
+        garden.setExit("northwest", house);
+        garden.setExit("southwest",cemetery);
+
+
+        //House exits and invent
+        house.setExit("south", cemetery);
+        house.setExit("southeast", garden);
+
+        //cemetery exits and invent
+        cemetery.setExit("north", house);
+        cemetery.setExit("northeast", garden);
+
+        //Staring parameters
+        currentRoom = riverBank;
+        Item obj1 = new Item();
+
+
+        player.setItem("one", obj1);
+
+
 
     }
 
@@ -71,24 +88,18 @@ public class Game {
                 drop(command);
                 break;
             case INVENTORY:
-              //  lookInventory(command);
+                lookInventory(command);
                 break;
     }
         return wantToQuit;
 }
 
-    private void printHelp(){
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("You are in the garden maze");
-        System.out.println();
-        System.out.println("Your command word are:");
-        System.out.println();
-        System.out.println(" \"GO\" " );
-    }
+
 
     private void look(Command command){
         if(command.hasSecondWord()){
             System.out.println("You can't look at "+command.getSecondWord());
+            helpHint();
             return;
         }
         System.out.println(currentRoom.getLongDescription());
@@ -99,6 +110,7 @@ public class Game {
     private void goRoom(Command command){
         if(!command.hasSecondWord()){
             System.out.println("Go where?");
+            helpHint();
             return;
         }
         String direction = command.getSecondWord();
@@ -114,6 +126,7 @@ public class Game {
     private boolean quit(Command command){
         if(command.hasSecondWord()){
             System.out.println("You can't quit "+ command.getCommandWord());
+            helpHint();
             return false;
         }else{
             return true;
@@ -123,6 +136,7 @@ public class Game {
     private void grab(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Grab what?");
+            helpHint();
             return;
         }
         String wantedItem = command.getSecondWord();
@@ -137,6 +151,7 @@ public class Game {
     private void drop(Command command){
         if(!command.hasSecondWord()){
             System.out.println("Drop what?");
+            helpHint();
             return;
         }
         String wantedItemToDrop = command.getSecondWord();
@@ -149,7 +164,19 @@ public class Game {
         }
     }
 
+    private void lookInventory(Command command){
+        if(command.hasSecondWord()){
+            System.out.println("You can't look in inventory of "+command.getSecondWord());
+            System.out.println("Your prompt request is: \"inventory\"");
+            helpHint();
+            return;
+        }
 
+        System.out.println(player.getItemString());
+    }
+
+
+    //
     private void printWelcome(){
         System.out.println();
         System.out.println("Welcome to my text adventure game!");
@@ -160,5 +187,16 @@ public class Game {
         System.out.println("room description");
         System.out.println(currentRoom.getShortDescription());
 
+    }
+    private void printHelp(){
+        System.out.println("You are lost. You are alone. You wander");
+        System.out.println("You are in the "+currentRoom.getRoomName());
+        System.out.println();
+        System.out.println("Your command word are:");
+        System.out.println(" \"go\" "+"\n"+" \"quit\" " +"\n"+ " \"UNKNOWN\" " +"\n"+ " \"LOOK\" " +"\n"+ " \"GRAB\" " +"\n"+ " \"DROP\" " +"\n"+ " \"INVENTORY\" ");
+    }
+    private void helpHint(){
+        System.out.println("----or----");
+        System.out.println("Type: \"Help\" for more info");
     }
 }

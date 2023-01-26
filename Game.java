@@ -19,32 +19,43 @@ public class Game {
         Room garden = new Room("short garden","long garden", "Garden");
         Room house = new Room("short house","long house", "House");
         Room cemetery = new Room("short cemetery","long cemetery", "cemetery");
-
+        Room xuinya = new Room("short xuinya", "long xuinya", "xuinya");
+        Room craftingTable = new Room("craft", "craft", "craftTable");
         //River exits and invent
         riverBank.setExit("west", garden);
 
-        Item obj2 = new Item();
-        riverBank.setItem("two", obj2);
         //Garden exits and invent
         garden.setExit("east", riverBank);
         garden.setExit("northwest", house);
         garden.setExit("southwest",cemetery);
+        garden.setExit("west", xuinya);
 
+        Item woods = new Item();
+        garden.setItem("woods", woods);
 
         //House exits and invent
         house.setExit("south", cemetery);
-        house.setExit("southeast", garden);
+        house.setExit("craftingTable", craftingTable);
 
         //cemetery exits and invent
         cemetery.setExit("north", house);
         cemetery.setExit("northeast", garden);
 
+        Item keys = new Item();
+        cemetery.setItem("keys", keys);
+
+        //Xuinya exits and invert
+        xuinya.setExit("south", cemetery);
+        xuinya.setExit("east", garden);
+
+        Item rope = new Item();
+        Item axe = new Item();
+        xuinya.setItem("rope", rope);
+        xuinya.setItem("axe", axe);
+
         //Staring parameters
         currentRoom = riverBank;
-        Item obj1 = new Item();
-
-
-        player.setItem("one", obj1);
+       // player.setItem("keys" ,keys);
 
 
 
@@ -68,6 +79,7 @@ public class Game {
         switch (commandWord){
             case UNKNOWN:
                 System.out.println("I don't know what you mean");
+                helpHint();
                 break;
             case HELP:
                 printHelp();
@@ -89,6 +101,9 @@ public class Game {
                 break;
             case INVENTORY:
                 lookInventory(command);
+                break;
+            case TEST:
+                testing(command);
                 break;
     }
         return wantToQuit;
@@ -115,6 +130,8 @@ public class Game {
         }
         String direction = command.getSecondWord();
         Room nextRoom = currentRoom.getExit(direction);
+
+
         if(nextRoom == null){
             System.out.println("There is no door");
         }else{
@@ -174,6 +191,11 @@ public class Game {
 
         System.out.println(player.getItemString());
     }
+    //testing
+    private void testing(Command command){
+        System.out.println(player.checkKeys());
+    }
+
 
 
     //

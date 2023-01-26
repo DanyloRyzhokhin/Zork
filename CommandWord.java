@@ -2,7 +2,7 @@ public enum CommandWord {
 
     GO("go"), QUIT("quit"), HELP("help"),
     UNKNOWN("?"), LOOK("look"), GRAB("grab"), DROP("drop"),
-    INVENTORY("inventory");
+    INVENTORY("inventory"), TEST("test");
 
     ;
     private String commandString;

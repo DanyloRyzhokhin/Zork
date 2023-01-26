@@ -21,4 +21,17 @@ public class Player {
     public Item getItem(String name){
         return inventory.remove(name);
     }
+
+    public boolean checkKeys(){
+        boolean isKeys = false;
+        Set<String> keys =inventory.keySet();
+        /*for(String item: keys){
+            if(item.)
+        }*/
+        if(keys.contains("keys")){
+            isKeys = true;
+        }
+        return isKeys;
+    }
+
 }

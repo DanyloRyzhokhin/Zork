@@ -1,3 +1,4 @@
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Iterator;
@@ -32,6 +33,13 @@ public class Player {
             isKeys = true;
         }
         return isKeys;
+    }
+    public boolean checkAxe(){
+        boolean isAxe = false;
+        Set<String> keys = inventory.keySet();
+        if(keys.contains("axe"))
+            isAxe  = true;
+        return isAxe;
     }
 
 }

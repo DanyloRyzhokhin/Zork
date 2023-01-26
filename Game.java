@@ -18,9 +18,9 @@ public class Game {
         Room riverBank = new Room("short river", "long river", "River Bank");
         Room garden = new Room("short garden","long garden", "Garden");
         Room house = new Room("short house","long house", "House");
-        Room cemetery = new Room("short cemetery","long cemetery", "cemetery");
-        Room xuinya = new Room("short xuinya", "long xuinya", "xuinya");
-        Room craftingTable = new Room("craft", "craft", "craftTable");
+        Room cemetery = new Room("short cemetery","long cemetery", "Cemetery");
+        Room xuinya = new Room("short xuinya", "long xuinya", "Xuinya");
+        Room craftingTable = new Room("craft", "craft", "CraftTable");
         //River exits and invent
         riverBank.setExit("west", garden);
 
@@ -102,6 +102,8 @@ public class Game {
             case INVENTORY:
                 lookInventory(command);
                 break;
+            case CUT:
+                cutTree(command);
             case TEST:
                 testing(command);
                 break;
@@ -130,11 +132,17 @@ public class Game {
         }
         String direction = command.getSecondWord();
         Room nextRoom = currentRoom.getExit(direction);
-
-
         if(nextRoom == null){
             System.out.println("There is no door");
         }else{
+            if(nextRoom.getRoomName()=="House"){
+                if(!player.checkKeys()){
+                    System.out.println("You don't have the keys, you should find them somewhere on the map");
+                    helpHint();
+                    return;
+                }
+            }
+
             currentRoom = nextRoom;
             System.out.println(currentRoom.getShortDescription());
         }
@@ -157,6 +165,11 @@ public class Game {
             return;
         }
         String wantedItem = command.getSecondWord();
+        if(wantedItem.equals("woods")){
+            System.out.println("You can not grab woods, first you need to cut the tree");
+            System.out.println("Try to use command \"CUT\"");
+            return;
+        }
         Item  item =  currentRoom.getItem(wantedItem);
         if(wantedItem==null){
             System.out.println("There is no item");
@@ -191,6 +204,34 @@ public class Game {
 
         System.out.println(player.getItemString());
     }
+
+    private void cutTree(Command command){
+        if(currentRoom.getRoomName()=="Garden"){
+            if (!command.hasSecondWord()){
+                System.out.println("Cut what?");
+                helpHint();
+                return;
+            }
+            String wantedItem = command.getSecondWord();
+            if(wantedItem.equals("tree") ){
+                if(  player.checkAxe()){
+                    //Item item = currentRoom.getItem("woods");
+                    player.setItem("wood", new Item());
+                    System.out.println("You successfully cut the tree and now you will find woods on your inventory");
+                    invHint();
+                }else{
+                    System.out.println("You do not have axe in your inventory, you will find it somewhere on the map");
+                    invHint();
+                }
+            } else {
+                System.out.println("You can not cut "+wantedItem);
+            }
+        }else {
+            System.out.println("Here is nothing to cut");
+        }
+    }
+
+
     //testing
     private void testing(Command command){
         System.out.println(player.checkKeys());
@@ -209,6 +250,10 @@ public class Game {
         System.out.println("room description");
         System.out.println(currentRoom.getShortDescription());
 
+    }
+    private void invHint(){
+        System.out.println("----NOTE----");
+        System.out.println("You can always check your inventory using command: \"INVENTORY\"");
     }
     private void printHelp(){
         System.out.println("You are lost. You are alone. You wander");

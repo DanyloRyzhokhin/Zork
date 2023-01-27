@@ -146,7 +146,7 @@ public class Game {
         if(nextRoom == null){
             System.out.println("There is no door");
         }else{
-            if(nextRoom.getRoomName()=="House"){
+            if(nextRoom.getRoomName().equals("House")){
                 if(!player.checkKeys()){
                     System.out.println("You don't have the keys, you should find them somewhere on the map");
                     helpHint();

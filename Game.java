@@ -4,6 +4,13 @@ public class Game {
     private Room currentRoom;
     private Parser parser;
     private Player player;
+
+    Room riverBank;
+    Room house;
+    Room cemetery;
+    Room barn;
+    Room craftingTable;
+    Room garden;
     public Game(){
         parser = new Parser();
         player = new Player();
@@ -15,12 +22,12 @@ public class Game {
     }
 
     private void createRooms(){
-        Room riverBank = new Room("short river", "long river", "River Bank");
-        Room garden = new Room("short garden","long garden", "Garden");
-        Room house = new Room("short house","long house", "House");
-        Room cemetery = new Room("short cemetery","long cemetery", "Cemetery");
-        Room xuinya = new Room("short xuinya", "long xuinya", "Xuinya");
-        Room craftingTable = new Room("craft", "craft", "CraftTable");
+        riverBank = new Room("short river", "long river", "River Bank");
+        garden = new Room("short garden","long garden", "Garden");
+        house = new Room("short house","long house", "House");
+        cemetery = new Room("short cemetery","long cemetery", "Cemetery");
+        barn = new Room("short barn", "long barn", "Barn");
+        craftingTable = new Room("craft", "craft", "CraftTable");
         //River exits and invent
         riverBank.setExit("west", garden);
 
@@ -28,14 +35,17 @@ public class Game {
         garden.setExit("east", riverBank);
         garden.setExit("northwest", house);
         garden.setExit("southwest",cemetery);
-        garden.setExit("west", xuinya);
+        garden.setExit("west", barn);
 
-        Item woods = new Item();
-        garden.setItem("woods", woods);
+        //Item woods = new Item();
+       // garden.setItem("woods", woods);
 
         //House exits and invent
         house.setExit("south", cemetery);
         house.setExit("craftingTable", craftingTable);
+
+        Item backpack = new Item();
+        house.setItem("backpack", backpack);
 
         //cemetery exits and invent
         cemetery.setExit("north", house);
@@ -44,19 +54,20 @@ public class Game {
         Item keys = new Item();
         cemetery.setItem("keys", keys);
 
-        //Xuinya exits and invert
-        xuinya.setExit("south", cemetery);
-        xuinya.setExit("east", garden);
+        //Barn exits and invert
+        barn.setExit("south", cemetery);
+        barn.setExit("east", garden);
 
         Item rope = new Item();
         Item axe = new Item();
-        xuinya.setItem("rope", rope);
-        xuinya.setItem("axe", axe);
+        barn.setItem("rope", rope);
+        barn.setItem("axe", axe);
 
         //Staring parameters
         currentRoom = riverBank;
        // player.setItem("keys" ,keys);
 
+        //Sub variables
 
 
     }
@@ -165,13 +176,15 @@ public class Game {
             return;
         }
         String wantedItem = command.getSecondWord();
-        if(wantedItem.equals("woods")){
-            System.out.println("You can not grab woods, first you need to cut the tree");
-            System.out.println("Try to use command \"CUT\"");
-            return;
+        if(!player.checkBackpack()){
+            if(player.invSize()>=1) {
+                System.out.println("Your inventory is full right now, to keep more you need backpack, you will find it somewhere on the map ");
+                helpHint();
+                return;
+            }
         }
         Item  item =  currentRoom.getItem(wantedItem);
-        if(wantedItem==null){
+        if(item==null){
             System.out.println("There is no item");
         }else{
             player.setItem(wantedItem,item);
@@ -216,8 +229,8 @@ public class Game {
             if(wantedItem.equals("tree") ){
                 if(  player.checkAxe()){
                     //Item item = currentRoom.getItem("woods");
-                    player.setItem("wood", new Item());
-                    System.out.println("You successfully cut the tree and now you will find woods on your inventory");
+                    garden.setItem("wood", new Item());
+                    System.out.println("You successfully cut the tree and now you will find woods on garden");
                     invHint();
                 }else{
                     System.out.println("You do not have axe in your inventory, you will find it somewhere on the map");
@@ -234,7 +247,9 @@ public class Game {
 
     //testing
     private void testing(Command command){
-        System.out.println(player.checkKeys());
+        //System.out.println(player.checkKeys());
+        System.out.println(player.invSize()>1);
+        System.out.println(player.checkBackpack());
     }
 
 
@@ -260,7 +275,15 @@ public class Game {
         System.out.println("You are in the "+currentRoom.getRoomName());
         System.out.println();
         System.out.println("Your command word are:");
-        System.out.println(" \"go\" "+"\n"+" \"quit\" " +"\n"+ " \"UNKNOWN\" " +"\n"+ " \"LOOK\" " +"\n"+ " \"GRAB\" " +"\n"+ " \"DROP\" " +"\n"+ " \"INVENTORY\" ");
+        System.out.println("""
+                 "go"\s
+                 "quit"\s
+                 "UNKNOWN"\s
+                 "LOOK"\s
+                 "GRAB"\s
+                 "DROP"\s
+                 "INVENTORY" \
+                """);
     }
     private void helpHint(){
         System.out.println("----or----");

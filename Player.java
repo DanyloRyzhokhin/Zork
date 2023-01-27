@@ -41,5 +41,14 @@ public class Player {
             isAxe  = true;
         return isAxe;
     }
-
+    public boolean checkBackpack(){
+        boolean isBack = false;
+        Set<String> keys = inventory.keySet();
+        if(keys.contains("backpack")) isBack = true;
+        return isBack;
+    }
+    public int invSize(){
+        Set<String> keys = inventory.keySet();
+        return keys.size();
+    }
 }

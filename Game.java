@@ -1,9 +1,11 @@
 import java.util.zip.GZIPOutputStream;
-
+import java.util.HashMap;
 public class Game {
     private Room currentRoom;
     private Parser parser;
     private Player player;
+
+
 
     Room riverBank;
     Room house;
@@ -14,6 +16,7 @@ public class Game {
     public Game(){
         parser = new Parser();
         player = new Player();
+
     }
     public static void main(String args[]){
         Game game = new Game();
@@ -23,17 +26,17 @@ public class Game {
 
     private void createRooms(){
         riverBank = new Room("short river", "long river", "River Bank");
-        garden = new Room("short garden","long garden", "Garden");
-        house = new Room("short house","long house", "House");
-        cemetery = new Room("short cemetery","long cemetery", "Cemetery");
-        barn = new Room("short barn", "long barn", "Barn");
-        craftingTable = new Room("craft", "craft", "CraftTable");
+        garden = new Room("short garden","long garden", "garden");
+        house = new Room("short house","long house", "house");
+        cemetery = new Room("short cemetery","long cemetery", "cemetery");
+        barn = new Room("short barn", "long barn", "barn");
+        craftingTable = new Room("craft", "craft", "craftingTable");
         //River exits and invent
         riverBank.setExit("west", garden);
 
         //Garden exits and invent
         garden.setExit("east", riverBank);
-        garden.setExit("northwest", house);
+        garden.setExit("north", house);
         garden.setExit("southwest",cemetery);
         garden.setExit("west", barn);
 
@@ -41,7 +44,7 @@ public class Game {
        // garden.setItem("woods", woods);
 
         //House exits and invent
-        house.setExit("south", cemetery);
+        house.setExit("south", garden);
         house.setExit("craftingTable", craftingTable);
 
         Item backpack = new Item();
@@ -67,6 +70,8 @@ public class Game {
         currentRoom = riverBank;
        // player.setItem("keys" ,keys);
 
+        //CraftTable parameters
+        craftingTable.setExit("craftTable", house);
         //Sub variables
 
 
@@ -118,6 +123,8 @@ public class Game {
             case TEST:
                 testing(command);
                 break;
+            case OPEN:
+                openCraft(command);
     }
         return wantToQuit;
 }
@@ -146,7 +153,7 @@ public class Game {
         if(nextRoom == null){
             System.out.println("There is no door");
         }else{
-            if(nextRoom.getRoomName().equals("House")){
+            if(nextRoom==house){
                 if(!player.checkKeys()){
                     System.out.println("You don't have the keys, you should find them somewhere on the map");
                     helpHint();
@@ -243,13 +250,32 @@ public class Game {
             System.out.println("Here is nothing to cut");
         }
     }
-
+    private void openCraft(Command command){
+        if(!command.hasSecondWord()){
+            System.out.println("Open what?");
+            helpHint();
+            return;
+        }
+        String direction = command.getSecondWord();
+        Room nextRoom = currentRoom.getExit(direction);
+        if(nextRoom==null){
+            System.out.println("Here is nothing to open");
+        }else{
+            currentRoom = nextRoom;
+            System.out.println(currentRoom.getShortDescription());
+        }
+    }
 
     //testing
     private void testing(Command command){
         //System.out.println(player.checkKeys());
-        System.out.println(player.invSize()>1);
-        System.out.println(player.checkBackpack());
+        //System.out.println(player.invSize()>1);
+       // System.out.println(player.checkBackpack());
+        player.setItem("wood", new Item());
+        player.setItem("backpack", new Item());
+        player.setItem("key", new Item());
+        player.setItem("rope", new Item());
+        System.out.println(player.getItemString());
     }
 
 

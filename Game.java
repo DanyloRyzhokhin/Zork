@@ -192,11 +192,14 @@ public class Game {
                     if(player.getRaftCond()){
                         finishWin();
                     }else finishDie();
+
                 }
+            }else{
+                currentRoom = nextRoom;
+                System.out.println(currentRoom.getShortDescription());
             }
 
-            currentRoom = nextRoom;
-            System.out.println(currentRoom.getShortDescription());
+
         }
     }
 
@@ -372,7 +375,9 @@ public class Game {
 
     }
     private void testCraft(Command command){
-        System.out.println(player.getRaftCond());
+       // System.out.println(player.getRaftCond());
+        finishWin();
+        finishDie();
     }
 
     //testing
@@ -427,11 +432,29 @@ public class Game {
     }
 
     private void finishWin(){
-        System.out.println("win");
+        System.out.println("|----------------------------|");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|         W   I   N          |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|----------------------------|");
+
+
         wantToQuit = true;
     }
     private void  finishDie(){
-        System.out.println("die");
+        System.out.println("|----------------------------|");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|         D   I   E          |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|                            |");
+        System.out.println("|----------------------------|");
         wantToQuit = true;
     }
 

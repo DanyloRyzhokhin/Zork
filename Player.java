@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 public class Player {
     private HashMap<String, Item> inventory;
+    private boolean raftCondition;
     Player(){
         inventory = new HashMap<>();
     }
@@ -47,8 +48,23 @@ public class Player {
         if(keys.contains("backpack")) isBack = true;
         return isBack;
     }
+
     public int invSize(){
         Set<String> keys = inventory.keySet();
         return keys.size();
+    }
+
+    public void setRaftCond(Boolean raftCondition){
+        this.raftCondition = raftCondition;
+    }
+    public boolean getRaftCond(){
+        return raftCondition;
+    }
+
+    public boolean checkRaft(){
+        boolean isBack = false;
+        Set<String> keys = inventory.keySet();
+        if(keys.contains("raft")) isBack = true;
+        return isBack;
     }
 }

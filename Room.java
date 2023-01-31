@@ -49,6 +49,7 @@ public class Room {
 
     public void setItem(String name,Item item ){
         inventory.put(name,item);
+        //System.out.println(inventory);
     }
     public Item getItem(String name){
         return inventory.remove(name);
